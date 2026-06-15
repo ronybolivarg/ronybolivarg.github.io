@@ -1,0 +1,141 @@
+// Sample Artworks Data
+const artworks = [
+    {
+        id: 1,
+        title: "Geharbnium",
+        price: 45,
+        image: "images/Geharbnium.jpg",
+        desc: "A haunting fusion of avian specters and serpentine grace, this ink drawing reveals a masked figure cloaked in shadow, cradling ethereal secrets. Bold black lines dance with organic curves and piercing eyes, evoking ancient rituals and forgotten myths. A powerful meditation on transformation and the hidden self."
+    },
+    {
+        id: 2,
+        title: "Deüminberherdine",
+        price: 60,
+        image: "images/Deüminberherdine.jpg",
+        desc: "Raw and visceral, this piece confronts the body as both vessel and wound. Cracked eyes weep rivers of indigo sorrow from a fragmented torso, while a divine hand offers or withholds salvation. Stark contrasts of red, blue, and black pulse with emotional intensity — a profound exploration of vulnerability, release, and the sacred feminine."
+    },
+    {
+        id: 3,
+        title: "Kændboininjouí",
+        price: 55,
+        image: "images/Kændboininjouí.jpg",
+        desc: "An intricate symphony of flesh, machinery, and myth. Tubes, ropes, and biomechanical forms entwine in chaotic harmony, forming a hybrid guardian bound by threads of fate. This dynamic composition blurs the line between organic life and constructed reality, inviting viewers into a surreal world of invention and entrapment."
+    },
+    {
+        id: 4,
+        title: "Fruibgältintte",
+        price: 50,
+        image: "images/Fruibgältintte.jpg",
+        desc: "A mesmerizing multi-eyed entity rises like a living altar, its tentacular crown of watchful orbs swaying with hypnotic rhythm. Held in ritualistic poise with needle and thread, this being weaves unseen destinies. Bold linework and symbolic patterns create a visionary portal into consciousness, multiplicity, and the mysteries of sight."
+    }
+];
+
+// Render Featured on Home
+function renderFeatured() {
+    const grid = document.getElementById('featured-grid');
+    if (!grid) return;
+    grid.innerHTML = '';
+    artworks.slice(0, 4).forEach(art => {
+        const item = document.createElement('div');
+        item.className = 'art-item';
+        item.innerHTML = `
+            <img src="${art.image}" alt="${art.title}" onerror="this.src='https://via.placeholder.com/300x280/222/ccc?text=${encodeURIComponent(art.title)}'">
+            <h3>${art.title}</h3>
+            <p class="price">$${art.price} (Digital)</p>
+            <p>${art.desc}</p>
+            <button class="add-to-cart" onclick="addToCart(${art.id})">Add to Cart</button>
+        `;
+        grid.appendChild(item);
+    });
+}
+
+// Render Shop Grid
+function renderShop() {
+    const grid = document.getElementById('shop-grid');
+    if (!grid) return;
+    grid.innerHTML = '';
+    artworks.forEach(art => {
+        const item = document.createElement('div');
+        item.className = 'art-item';
+        item.innerHTML = `
+            <img src="${art.image}" alt="${art.title}" onerror="this.src='https://via.placeholder.com/300x280/222/ccc?text=${encodeURIComponent(art.title)}'">
+            <h3>${art.title}</h3>
+            <p class="price">$${art.price}</p>
+            <p>${art.desc}</p>
+            <button class="add-to-cart" onclick="addToCart(${art.id})">Add to Cart</button>
+        `;
+        grid.appendChild(item);
+    });
+}
+
+let cart = [];
+
+// Add to Cart
+function addToCart(id) {
+    const art = artworks.find(a => a.id === id);
+    if (art) {
+        cart.push(art);
+        alert(`${art.title} added to cart!`);
+        updateCartCount();
+    }
+}
+
+function updateCartCount() {
+    // Could add a cart icon count if expanded
+    console.log('Cart items:', cart.length);
+}
+
+// Simple Cart Modal
+function showCart() {
+    const modal = document.getElementById('cart-modal');
+    if (!modal) return;
+    const itemsList = document.getElementById('cart-items');
+    const totalEl = document.getElementById('cart-total');
+    
+    itemsList.innerHTML = '';
+    let total = 0;
+    
+    cart.forEach((item, index) => {
+        const li = document.createElement('li');
+        li.textContent = `${item.title} - $${item.price}`;
+        itemsList.appendChild(li);
+        total += item.price;
+    });
+    
+    totalEl.textContent = total;
+    modal.style.display = 'block';
+}
+
+// Close modal (add close button in HTML if needed)
+function closeModal() {
+    const modal = document.getElementById('cart-modal');
+    if (modal) modal.style.display = 'none';
+}
+
+function checkout() {
+    if (cart.length === 0) {
+        alert("Cart is empty!");
+        return;
+    }
+    alert("Thank you! Redirecting to payment (PayPal/Stripe integration coming soon). For now, contact me directly.");
+    cart = [];
+    closeModal();
+}
+
+// Form handling
+document.addEventListener('DOMContentLoaded', () => {
+    renderFeatured();
+    renderShop();
+    
+    const form = document.getElementById('contact-form');
+    if (form) {
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Message sent! (Demo - in real site this would email you)');
+            form.reset();
+        });
+    }
+    
+    // Add cart icon or button if desired
+    console.log('Rony Bolivar Art site scripts loaded.');
+});
